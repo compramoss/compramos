@@ -12,54 +12,7 @@
     -webkit-user-select: none;
     user-select: none;
 }
-button, a {
-    position: relative;
-    overflow: hidden;
-}
-button,
-a,
-.server-address {
-    position: relative;
-    overflow: hidden;
-}
 
-button::before,
-a.invite-button::before,
-.server-address::before {
-    content: "";
-    position: absolute;
-    width: 150px;
-    height: 150px;
-    left: var(--mouse-x, 50%);
-    top: var(--mouse-y, 50%);
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    pointer-events: none;
-    opacity: 0;
-    background: radial-gradient(
-        circle,
-        rgba(125, 190, 130, 0.17) 0%,
-        rgba(100, 160, 105, 0.08) 40%,
-        transparent 72%
-    );
-    transition: opacity .15s ease;
-}
-
-button:hover::before,
-a.invite-button:hover::before,
-.server-address:hover::before {
-    opacity: 1;
-}
-
-.server-address > * {
-    position: relative;
-    z-index: 1;
-}
-button > *,
-a.invite-button > * {
-    position: relative;
-    z-index: 1;
-}
 body {
     margin: 0;
     min-height: 100vh;
@@ -76,25 +29,31 @@ body {
         linear-gradient(rgba(112,145,117,.10) 1px, transparent 1px),
         linear-gradient(90deg, rgba(112,145,117,.10) 1px, transparent 1px);
     background-size: auto, auto, 40px 40px, 40px 40px;
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
 }
 
 .topbar {
-    position: fixed;
-    inset: 0 0 auto 0;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100%;
     height: 53px;
-    z-index: 10;
+    z-index: 99999 !important;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 14px;
-    background: rgba(7,8,7,.92);
+    background: rgba(7,8,7,.96);
     border-bottom: 1px solid rgba(145,160,146,.14);
+    isolation: isolate;
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .brand-link {
+    position: relative;
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -162,6 +121,7 @@ body {
     transform: translateY(-5px) scale(.97);
     transform-origin: top right;
     transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
+    z-index: 100000;
 }
 
 .dropdown.open {
@@ -230,10 +190,12 @@ body::before {
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
-    background: radial-gradient(circle,
+    background: radial-gradient(
+        circle,
         rgba(35,125,55,.12),
         rgba(20,80,35,.045) 40%,
-        transparent 72%);
+        transparent 72%
+    );
     transform: translate(-50%,-50%);
     opacity: 0;
     transition: opacity .3s ease;
@@ -257,7 +219,9 @@ h1 {
     text-shadow: 0 0 25px rgba(35,110,50,.12);
 }
 
-h1 span { color: #4f9b60; }
+h1 span {
+    color: #4f9b60;
+}
 
 .subtitle {
     margin: 15px auto 0;
@@ -268,6 +232,7 @@ h1 span { color: #4f9b60; }
 }
 
 .server-address {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 13px;
@@ -279,6 +244,7 @@ h1 span { color: #4f9b60; }
     background: rgba(35,38,35,.72);
     color: #d2ded3;
     box-shadow: 0 5px 18px rgba(0,0,0,.22);
+    overflow: hidden;
 }
 
 .server-ip {
@@ -322,6 +288,8 @@ h1 span { color: #4f9b60; }
 }
 
 .invite-button {
+    position: relative;
+    overflow: hidden;
     min-width: 150px;
     min-height: 40px;
     display: inline-flex;
@@ -366,17 +334,73 @@ h1 span { color: #4f9b60; }
     font-size: 13px;
 }
 
+button,
+a.invite-button {
+    position: relative;
+    overflow: hidden;
+}
+
+button::before,
+a.invite-button::before,
+.server-address::before {
+    content: "";
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(
+        circle,
+        rgba(125,190,130,.17) 0%,
+        rgba(100,160,105,.08) 40%,
+        transparent 72%
+    );
+    transition: opacity .15s ease;
+}
+
+button:hover::before,
+a.invite-button:hover::before,
+.server-address:hover::before {
+    opacity: 1;
+}
+
+.server-address > *,
+button > *,
+a.invite-button > * {
+    position: relative;
+    z-index: 1;
+}
+
 @media (max-width: 480px) {
-    .container { padding: 30px 8px; }
-    .buttons { gap: 9px; }
-    .invite-button { min-width: 140px; }
-    .server-address { margin-top: 23px; }
+    .container {
+        padding: 30px 8px;
+    }
+
+    .buttons {
+        gap: 9px;
+    }
+
+    .invite-button {
+        min-width: 140px;
+    }
+
+    .server-address {
+        margin-top: 23px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    body::before { animation: none; }
+    body::before {
+        animation: none;
+    }
 
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
         scroll-behavior: auto !important;
         transition-duration: .01ms !important;
     }
@@ -387,45 +411,43 @@ h1 span { color: #4f9b60; }
 <body>
 
 <header class="topbar">
-    <a class="brand-link"
-       href="https://compramoss.github.io"
-       aria-label="idk why i added redirect to same site tbh">
-        <img class="brand-mark"
-             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc85zUxXuTy-tqc31sQN8XZ153Gv6fxev0eW06TzrQAA&s=10"
-             alt="Compramos logo">
+    <a class="brand-link" href="https://compramoss.github.io/" aria-label="Compramos home">
+        <img class="brand-mark" src="./The%20Compramos%20Server_files/images_6voq.jpg" alt="Compramos logo">
     </a>
 
     <div class="social-menu">
-        <button class="share-button"
-                id="shareButton"
-                type="button"
-                aria-label="Open social links"
-                aria-expanded="false"
-                aria-controls="socialDropdown">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="1.8" stroke-linecap="round"
-                 stroke-linejoin="round" aria-hidden="true">
-                <circle cx="18" cy="5" r="3"/>
-                <circle cx="6" cy="12" r="3"/>
-                <circle cx="18" cy="19" r="3"/>
-                <path d="M8.7 10.7 15.3 6.3"/>
-                <path d="m8.7 13.3 6.6 4.4"/>
+        <button class="share-button" id="shareButton" type="button"
+            aria-label="Open social links"
+            aria-expanded="false"
+            aria-controls="socialDropdown">
+
+            <svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round"
+                aria-hidden="true">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <path d="M8.7 10.7 15.3 6.3"></path>
+                <path d="m8.7 13.3 6.6 4.4"></path>
             </svg>
         </button>
 
         <div class="dropdown" id="socialDropdown">
             <a href="https://discord.gg/aRNdStmj2X"
-               target="_blank" rel="noopener noreferrer">
+                target="_blank" rel="noopener noreferrer">
+
                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M19.7 5.1A18.5 18.5 0 0 0 15.2 3.7l-.6 1.2a17 17 0 0 0-5.2 0l-.6-1.2a18.5 18.5 0 0 0-4.5 1.4C1.5 9.3.7 13.4 1.1 17.5a18.4 18.4 0 0 0 5.5 2.8l1.2-2a11.8 11.8 0 0 1-1.9-.9l.5-.4a13.2 13.2 0 0 0 11.2 0l.5.4a11.8 11.8 0 0 1-1.9.9l1.2 2a18.4 18.4 0 0 0 5.5-2.8c.5-4.7-.8-8.8-3.2-12.4ZM8.5 14.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm7 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/>
+                    <path d="M19.7 5.1A18.5 18.5 0 0 0 15.2 3.7l-.6 1.2a17 17 0 0 0-5.2 0l-.6-1.2a18.5 18.5 0 0 0-4.5 1.4C1.5 9.3.7 13.4 1.1 17.5a18.4 18.4 0 0 0 5.5 2.8l1.2-2a11.8 11.8 0 0 1-1.9-.9l.5-.4a13.2 13.2 0 0 0 11.2 0l.5.4a11.8 11.8 0 0 1-1.9.9l1.2 2a18.4 18.4 0 0 0 5.5-2.8c.5-4.7-.8-8.8-3.2-12.4ZM8.5 14.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm7 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"></path>
                 </svg>
                 Discord
             </a>
 
-            <a href="https://mango-smp.github.io"
-               target="_blank" rel="noopener noreferrer">
+            <a href="https://mango-smp.github.io/"
+                target="_blank" rel="noopener noreferrer">
+
                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.67-3.75-1.32-3.75-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.6 1.21 3.23.92.1-.72.39-1.21.7-1.49-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.15-3-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.05 1.15a10.6 10.6 0 0 1 5.55 0c2.11-1.45 3.05-1.15 3.05-1.15.61 1.54.23 2.68.11 2.96.72.78 1.15 1.78 1.15 3 0 4.29-2.61 5.23-5.1 5.51.4.35.75 1.03.75 2.08V22c0 .29.2.64.77.53A11.1 11.1 0 0 0 12 .9Z"/>
+                    <path d="M12 .9a11.1 11.1 0 0 0-3.51 21.63c.55.1.76-.24.76-.53v-2.08c-3.1.67-3.75-1.32-3.75-1.32-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.12.08 1.71 1.15 1.71 1.15.99 1.7 2.6 1.21 3.23.92.1-.72.39-1.21.7-1.49-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.15-3-.12-.28-.5-1.42.11-2.96 0 0 .94-.3 3.05 1.15a10.6 10.6 0 0 1 5.55 0c2.11-1.45 3.05-1.15 3.05-1.15.61 1.54.23 2.68.11 2.96.72.78 1.15 1.78 1.15 3 0 4.29-2.61 5.23-5.1 5.51.4.35.75 1.03.75 2.08V22c0 .29.2.64.77.53A11.1 11.1 0 0 0 12 .9Z"></path>
                 </svg>
                 Try My Friend Server
             </a>
@@ -437,32 +459,39 @@ h1 span { color: #4f9b60; }
 
 <main class="container">
     <h1>Join <span>Compramos</span> Server</h1>
-    <p class="subtitle">No AntiCheat, No Moderation, Yes Freedom</p>
+
+    <p class="subtitle">
+        No AntiCheat, No Moderation, Yes Freedom
+    </p>
 
     <div class="server-address">
         <span class="server-ip">compramos.play.hosting</span>
+
         <button class="copy-ip" id="copyIp" type="button"
-                aria-label="Copy server IP" title="Copy server IP">
+            aria-label="Copy server IP"
+            title="Copy server IP">
+
             <svg id="copyIcon" viewBox="0 0 24 24"
-                 fill="none" stroke="currentColor"
-                 stroke-width="1.8" stroke-linecap="round"
-                 stroke-linejoin="round" aria-hidden="true">
-                 <rect x="8" y="8" width="12" height="12" rx="2"/>
-                 <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
-           </svg>
+                fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+
+                <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path>
+            </svg>
         </button>
     </div>
 
     <div class="buttons">
         <a class="invite-button"
-           href="https://discord.gg/aRNdStmj2X"
-           target="_blank" rel="noopener noreferrer">
+            href="https://discord.gg/aRNdStmj2X"
+            target="_blank" rel="noopener noreferrer">
             Join Our Discord
         </a>
 
         <a class="invite-button learn-more"
-           href="https://youtube.com/watch?v=dQw4w9WgXcQ"
-           target="_blank" rel="noopener noreferrer">
+            href="https://youtube.com/watch?v=dQw4w9WgXcQ"
+            target="_blank" rel="noopener noreferrer">
             Learn More
         </a>
     </div>
@@ -472,9 +501,11 @@ h1 span { color: #4f9b60; }
 
 <script>
 const serverIp = "compramos.play.hosting";
-const status = document.getElementById("status");
 
 const copyButton = document.getElementById("copyIp");
+const shareButton = document.getElementById("shareButton");
+const dropdown = document.getElementById("socialDropdown");
+const glow = document.getElementById("cursorGlow");
 
 const copyIcon = `
 <rect x="8" y="8" width="12" height="12" rx="2"/>
@@ -505,7 +536,6 @@ copyButton.addEventListener("click", async () => {
     }
 
     const svg = copyButton.querySelector("svg");
-
     svg.innerHTML = checkIcon;
 
     clearTimeout(copyTimeout);
@@ -514,8 +544,6 @@ copyButton.addEventListener("click", async () => {
         svg.innerHTML = copyIcon;
     }, 3000);
 });
-const shareButton = document.getElementById("shareButton");
-const dropdown = document.getElementById("socialDropdown");
 
 function closeDropdown() {
     dropdown.classList.remove("open");
@@ -549,16 +577,23 @@ dropdown.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", closeDropdown);
 });
 
-document.querySelectorAll("button, a.invite-button, .server-address").forEach((element) => {
+document.querySelectorAll(
+    "button, a.invite-button, .server-address"
+).forEach((element) => {
     element.addEventListener("mousemove", (event) => {
         const rect = element.getBoundingClientRect();
 
-        element.style.setProperty("--mouse-x", (event.clientX - rect.left) + "px");
-        element.style.setProperty("--mouse-y", (event.clientY - rect.top) + "px");
+        element.style.setProperty(
+            "--mouse-x",
+            (event.clientX - rect.left) + "px"
+        );
+
+        element.style.setProperty(
+            "--mouse-y",
+            (event.clientY - rect.top) + "px"
+        );
     });
 });
-
-const glow = document.getElementById("cursorGlow");
 
 document.addEventListener("mousemove", (event) => {
     glow.style.left = event.clientX + "px";
@@ -575,5 +610,6 @@ document.addEventListener("mouseleave", () => {
     glow.style.opacity = "0";
 });
 </script>
+
 </body>
 </html>
